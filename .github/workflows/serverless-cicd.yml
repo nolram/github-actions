@@ -31,7 +31,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - id: install-dependencies
+    - id: node-dependencies
       uses: nolram/github-actions/actions/yarn_install@main
 
     - name: Configure AWS credentials

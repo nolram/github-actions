@@ -1,21 +1,17 @@
 name: 'Yarn Install'
 description: 'Install Dependencies with Yarn'
 inputs:
-  who-to-greet:  # id of input
+  npm_version:  # id of input
     description: 'Who to greet'
     required: true
-    default: 'World'
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
+    default: '14'
 runs:
   using: "composite"
   steps:
-    - name: Use Node.js 14
+    - name: Use Node.js ${{ inputs.npm_version }}
       uses: actions/setup-node@v3
       with:
-        node-version: 14
+        node-version: ${{ inputs.npm_version }}
         cache: 'yarn'
     
     - name: Yarn Install

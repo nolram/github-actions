@@ -11,14 +11,13 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Run Snyk to check for vulnerabilities Node
-      if: ${{ inputs.project_type == 'node' }}
-      uses: snyk/actions/node@master
+    - name: Install Snyk Tools
+      uses: snyk/actions/setup@master
       env:
         SNYK_TOKEN: ${{ inputs.snyk_token }}
 
-    - name: Run Snyk to check for vulnerabilities Node
-      if: ${{ inputs.project_type == 'python' }}
-      uses: snyk/actions/python@master
+    - name: Snyk monitor
+      run: snyk test
+      shell: bash
       env:
-        SNYK_TOKEN: ${{ inputs.snyk_token }}
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

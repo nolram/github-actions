@@ -31,7 +31,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - id: Install Dependencies
+    - id: install-dependencies
       uses: ./actions/yarn_install@main
 
     - name: Configure AWS credentials

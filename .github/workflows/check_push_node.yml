@@ -12,7 +12,7 @@ on:
         required: true
 
 jobs:
-  quality_code:
+  snyk_run:
     runs-on: ubuntu-latest
     environment: production
     

@@ -11,8 +11,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@master
-    - name: Run Snyk to check for vulnerabilities
-      uses: snyk/actions/${{ inputs.project_type }}@master
+    - name: Run Snyk to check for vulnerabilities Node
+      if: ${{ inputs.project_type == 'node' }}
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ inputs.snyk_token }}
+
+    - name: Run Snyk to check for vulnerabilities Node
+      if: ${{ inputs.project_type == 'python' }}
+      uses: snyk/actions/python@master
       env:
         SNYK_TOKEN: ${{ inputs.snyk_token }}

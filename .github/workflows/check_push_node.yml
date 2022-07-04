@@ -2,6 +2,11 @@ name: Run Snyk and other tools to check vulnerabilities
 
 on:
   workflow_call:
+    inputs:
+      project_type:
+        required: true
+        type: string
+        default: "node"
     secrets:
       SNYK_TOKEN:
         required: true

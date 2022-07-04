@@ -6,6 +6,10 @@ on:
       AWS_REGION:
         required: true
         type: string
+      project_type:
+        required: true
+        type: string
+        default: "node"
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true

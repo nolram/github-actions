@@ -13,11 +13,9 @@ runs:
   steps:
     - name: Install Snyk Tools
       uses: snyk/actions/setup@master
-      env:
-        SNYK_TOKEN: ${{ inputs.snyk_token }}
 
     - name: Snyk monitor
       run: snyk test
       shell: bash
       env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        SNYK_TOKEN: ${{ inputs.SNYK_TOKEN }}

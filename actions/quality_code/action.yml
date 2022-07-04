@@ -5,11 +5,14 @@ inputs:
     description: 'Project type'
     required: true
     default: 'node'
+  snyk_token:
+    description: 'Snyk Token'
+    required: true
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@master
     - name: Run Snyk to check for vulnerabilities
-      uses: snyk/actions/${{ input.project_type }}@master
+      uses: snyk/actions/${{ inputs.project_type }}@master
       env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        SNYK_TOKEN: ${{ inputs.snyk_token }}

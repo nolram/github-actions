@@ -29,7 +29,9 @@ jobs:
     
     - id: quality_code
       uses: nolram/github-actions/actions/quality_code@main
-
+      with:
+        snyk_token: ${{ secrets.SNYK_TOKEN }}
+        project_type: ${{ inputs.project_type }}
 
   deploy:
     runs-on: ubuntu-latest

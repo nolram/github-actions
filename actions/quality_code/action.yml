@@ -1,0 +1,15 @@
+name: 'Yarn Install'
+description: 'Install Dependencies with Yarn'
+inputs:
+  project_type:
+    description: 'Project type'
+    required: true
+    default: 'node'
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@master
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/${{ input.project_type }}@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

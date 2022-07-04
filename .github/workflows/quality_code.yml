@@ -1,0 +1,19 @@
+name: Run Snyk and other tools to check vulnerabilities
+
+on:
+  workflow_call:
+    secrets:
+      SNYK_TOKEN:
+        required: true
+
+jobs:
+  quality_code:
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - id: quality_code
+      uses: nolram/github-actions/actions/quality_code@main

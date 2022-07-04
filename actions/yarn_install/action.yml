@@ -1,17 +1,17 @@
 name: 'Yarn Install'
 description: 'Install Dependencies with Yarn'
 inputs:
-  npm_version:  # id of input
-    description: 'Who to greet'
+  node_version:
+    description: 'Node version'
     required: true
     default: '14'
 runs:
   using: "composite"
   steps:
-    - name: Use Node.js ${{ inputs.npm_version }}
+    - name: Use Node.js ${{ inputs.node_version }}
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ inputs.npm_version }}
+        node-version: ${{ inputs.node_version }}
         cache: 'yarn'
     
     - name: Yarn Install

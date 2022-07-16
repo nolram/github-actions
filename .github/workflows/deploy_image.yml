@@ -29,11 +29,11 @@ jobs:
       uses: actions/checkout@v3
 
     - id: node_dependencies
-      if: ${{ inputs.project_type == "node" }}
+      if: ${{ inputs.project_type == 'node' }}
       uses: nolram/github-actions/actions/yarn_install@main
 
     - id: python_dependencies
-      if: ${{ inputs.project_type == "python" }}
+      if: ${{ inputs.project_type == 'python' }}
       uses: nolram/github-actions/actions/python_install@main
 
   build_docker_image:

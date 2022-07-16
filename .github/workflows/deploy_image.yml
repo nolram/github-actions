@@ -72,7 +72,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v4
       with:
-        images: ${{ steps.login-ecr.outputs.registry }}/${{ inputs.AWS_ECR_REPO }}
+        images: ${{ steps.login-ecr-public.outputs.registry }}/${{ inputs.AWS_ECR_REPO }}
         tags: |
           type=raw,value=latest,enable={{is_default_branch}}
           type=sha,format=short

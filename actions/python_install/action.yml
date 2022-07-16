@@ -1,0 +1,19 @@
+name: 'Pip Install'
+description: 'Install Dependencies Pip'
+inputs:
+  python_version:
+    description: 'Python version'
+    required: true
+    default: '3.8'
+runs:
+  using: "composite"
+  steps:
+    - name: Use Python Version ${{ inputs.python_version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ inputs.python_version }}
+        cache: 'pip'
+    
+    - name: Yarn Install
+      run: pip install -r requirements.txt
+      shell: bash

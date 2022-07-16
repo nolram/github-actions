@@ -1,0 +1,90 @@
+name: Build Docker Image and push to ECR
+
+on:
+  workflow_call:
+    inputs:
+      AWS_REGION:
+        required: true
+        type: string
+      AWS_ECR_REPO:
+        required: true
+        type: string
+      project_type:
+        required: true
+        type: string
+        default: "python"
+    secrets:
+      AWS_ROLE_ECR:
+        required: true
+      SNYK_TOKEN:
+        required: true
+
+jobs:
+  install_dependencies:
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - id: node_dependencies
+      if: ${{ inputs.project_type == "node" }}
+      uses: nolram/github-actions/actions/yarn_install@main
+
+    - id: python_dependencies
+      if: ${{ inputs.project_type == "python" }}
+      uses: nolram/github-actions/actions/python_install@main
+
+  build_docker_image:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: install_dependencies
+    
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+
+    - name: Login to Amazon ECR
+      id: login-ecr-public
+      uses: aws-actions/amazon-ecr-login@v1
+      with:
+        registry-type: 'public'
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: ${{ inputs.AWS_REGION }}
+        role-to-assume: ${{ secrets.AWS_ROLE_ECR }}
+
+    # Reference: https://blog.tedivm.com/guides/2021/10/github-actions-push-to-aws-ecr-without-credentials-oidc/
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        images: ${{ steps.login-ecr.outputs.registry }}/${{ inputs.AWS_ECR_REPO }}
+        tags: |
+          type=schedule,pattern=latest
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+          type=ref,event=branch
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        platforms: linux/amd64,linux/arm64
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}

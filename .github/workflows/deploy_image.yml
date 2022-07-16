@@ -70,14 +70,12 @@ jobs:
     # Reference: https://blog.tedivm.com/guides/2021/10/github-actions-push-to-aws-ecr-without-credentials-oidc/
     - name: Extract metadata (tags, labels) for Docker
       id: meta
-      uses: docker/metadata-action@v3
+      uses: docker/metadata-action@v4
       with:
         images: ${{ steps.login-ecr.outputs.registry }}/${{ inputs.AWS_ECR_REPO }}
         tags: |
-          type=schedule,pattern=latest
-          type=semver,pattern={{version}}
-          type=semver,pattern={{major}}.{{minor}}
-          type=semver,pattern={{major}}
+          type=raw,value=latest,enable={{is_default_branch}}
+          type=sha,format=short
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
